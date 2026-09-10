@@ -1,5 +1,7 @@
-package com.example.springboottest;
+package com.example.springboottest.service;
 
+import com.example.springboottest.model.FoodInfo;
+import com.example.springboottest.exception.RestaurantNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

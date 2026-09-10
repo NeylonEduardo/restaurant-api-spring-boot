@@ -1,4 +1,4 @@
-package com.example.springboottest;
+package com.example.springboottest.model;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;

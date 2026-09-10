@@ -1,5 +1,7 @@
-package com.example.springboottest;
+package com.example.springboottest.controller;
 
+import com.example.springboottest.model.FoodInfo;
+import com.example.springboottest.service.RestaurantService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
@@ -20,7 +22,7 @@ public class RestaurantController {
     }
 
     @PostMapping("/foods")
-    public ResponseEntity<String> postFood(@RequestBody List<@Valid FoodInfo> foodInfoList) {
+    public ResponseEntity<String> postFoods(@RequestBody List<@Valid FoodInfo> foodInfoList) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(service.createFood(foodInfoList));
@@ -37,7 +39,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/foods/{id}")
-    public ResponseEntity<FoodInfo> getFood(@PathVariable Long id) {
+    public ResponseEntity<FoodInfo> getFoodById(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .body(service.getFoodById(id));

@@ -25,10 +25,9 @@ A REST API for restaurant food management, developed to practice Java and Spring
 ```json
 {
   "name": "Margherita Pizza",
-  "quantity": 8,
   "price": 32.50,
   "calories": 720.0,
-  "id": 1
+  "quantity": 8
 }
 ```
 
@@ -103,6 +102,7 @@ restarted.
 * Dependency injection
 * Java records
 * Streams and lambdas
+* DTOs to control the response and output
 * Comparator
 * Request parameters
 * ResponseEntity

@@ -1,5 +1,7 @@
 package com.example.springboottest.application;
 
+import com.example.springboottest.domain.FoodId;
+import com.example.springboottest.dto.FoodOutput;
 import com.example.springboottest.exception.RestaurantNotFoundException;
 import com.example.springboottest.model.FoodEntity;
 import com.example.springboottest.repository.RestaurantRepository;
@@ -16,10 +18,11 @@ public class GetFoodByIdUseCase {
         this.foodsList = restaurantRepository.getFoodsList();
     }
 
-    public FoodEntity execute(Long id) {
+    public FoodOutput execute(FoodId id) {
         return foodsList.stream()
-                .filter(food -> Objects.equals(food.id(), id))
+                .filter(food -> Objects.equals(food.getId(), id))
                 .findFirst()
+                .map(FoodOutput::from)
                 .orElseThrow(() ->
                         new RestaurantNotFoundException("Id does not exist"));
     }

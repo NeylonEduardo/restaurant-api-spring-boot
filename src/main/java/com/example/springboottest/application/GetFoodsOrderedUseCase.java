@@ -1,5 +1,6 @@
 package com.example.springboottest.application;
 
+import com.example.springboottest.dto.FoodOutput;
 import com.example.springboottest.model.FoodEntity;
 import com.example.springboottest.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
@@ -15,23 +16,24 @@ public class GetFoodsOrderedUseCase {
         this.foodsList = restaurantRepository.getFoodsList();
     }
 
-    public List<FoodEntity> execute(String sortBy) {
+    public List<FoodOutput> execute(String sortBy) {
         Comparator<FoodEntity> comparator = switch (sortBy.toLowerCase()) {
-            case "name" -> Comparator.comparing(FoodEntity::name).thenComparing(FoodEntity::quantity);
+            case "name" -> Comparator.comparing(FoodEntity::getName).thenComparing(FoodEntity::getQuantity);
 
-            case "quantity" -> Comparator.comparing(FoodEntity::quantity).thenComparing(FoodEntity::price);
+            case "quantity" -> Comparator.comparing(FoodEntity::getQuantity).thenComparing(FoodEntity::getPrice);
 
-            case "price" -> Comparator.comparing(FoodEntity::price).thenComparing(FoodEntity::calories);
+            case "price" -> Comparator.comparing(FoodEntity::getPrice).thenComparing(FoodEntity::getCalories);
 
-            case "calories" -> Comparator.comparing(FoodEntity::calories).thenComparing(FoodEntity::id);
+            case "calories" -> Comparator.comparing(FoodEntity::getCalories).thenComparing(FoodEntity::getId);
 
-            case "id" -> Comparator.comparing(FoodEntity::id);
+            case "id" -> Comparator.comparing(FoodEntity::getId);
 
             default -> throw new IllegalStateException("Unexpected value: " + sortBy);
         };
 
         return foodsList.stream()
                 .sorted(comparator)
+                .map(FoodOutput::from)
                 .toList();
     }
 }

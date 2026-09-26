@@ -1,5 +1,6 @@
 package com.example.springboottest.application;
 
+import com.example.springboottest.dto.FoodOutput;
 import com.example.springboottest.exception.ValidListEmpty;
 import com.example.springboottest.model.FoodEntity;
 import com.example.springboottest.repository.RestaurantRepository;
@@ -18,10 +19,11 @@ public class GetMaxPriceFoodsUseCase {
         this.validListEmpty = validListEmpty;
     }
 
-    public List<FoodEntity> execute(BigDecimal maxPrice) {
+    public List<FoodOutput> execute(BigDecimal maxPrice) {
         validListEmpty.validNotEmptyList(foodsList);
         return foodsList.stream()
-                .filter(food -> food.price().compareTo(maxPrice) <= 0)
+                .filter(food -> food.getPrice().compareTo(maxPrice) <= 0)
+                .map(FoodOutput::from)
                 .toList();
     }
 }

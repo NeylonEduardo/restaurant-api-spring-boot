@@ -16,7 +16,7 @@ public class GetSummaryUserCase {
 
     public List<String> execute() {
         return foodsList.stream()
-                .map(FoodEntity::name)
+                .map(FoodEntity::getName)
                 .toList();
     }
 }

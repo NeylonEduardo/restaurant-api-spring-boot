@@ -1,5 +1,6 @@
 package com.example.springboottest.application;
 
+import com.example.springboottest.domain.FoodId;
 import com.example.springboottest.exception.RestaurantNotFoundException;
 import com.example.springboottest.model.FoodEntity;
 import com.example.springboottest.repository.RestaurantRepository;
@@ -16,14 +17,14 @@ public class DeleteFoodByIdUseCase {
         this.foodsList = restaurantRepository.getFoodsList();
     }
 
-    public String execute(Long id) {
+    public String execute(FoodId id) {
         FoodEntity foodToRemove = foodsList.stream()
-                .filter(food -> Objects.equals(food.id(), id))
+                .filter(food -> Objects.equals(food.getId(), id))
                 .findFirst()
                 .orElseThrow(() ->
                         new RestaurantNotFoundException(id + " not find"));
 
         foodsList.remove(foodToRemove);
-        return String.format("%s removed from the list", foodToRemove.name());
+        return String.format("%s removed from the list", foodToRemove.getName());
     }
 }

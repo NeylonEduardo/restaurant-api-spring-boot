@@ -1,5 +1,7 @@
 package com.example.springboottest.application;
 
+import com.example.springboottest.dto.FoodOutput;
+import com.example.springboottest.dto.FoodRequest;
 import com.example.springboottest.model.FoodEntity;
 import com.example.springboottest.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
@@ -14,8 +16,15 @@ public class CreateFoodUseCase {
         this.foodsList = restaurantRepository.getFoodsList();
     }
 
-    public String execute(FoodEntity entity) {
+    public FoodOutput execute(FoodRequest request) {
+        FoodEntity entity = new FoodEntity(
+                request.name(),
+                request.price(),
+                request.calories(),
+                request.quantity());
+
         foodsList.add(entity);
-            return String.format("%d food added to the list!", foodsList.size());
+
+        return FoodOutput.from(entity);
     }
 }

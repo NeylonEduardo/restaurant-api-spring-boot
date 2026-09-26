@@ -1,28 +1,28 @@
 package com.example.springboottest.model;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import com.example.springboottest.domain.FoodId;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 
-public record FoodEntity(
-        @NotBlank(message = "The name is mandatory")
-        String name,
+@Getter
+@Setter
+public class FoodEntity {
+    private FoodId id;
+    private String name;
+    private BigDecimal price;
+    private float calories;
+    private int quantity;
 
-        @Min(value = 0, message = "Quantity must be greater than or equal to zero")
-        int quantity,
+    public FoodEntity(String name, BigDecimal price, float calories, int quantity) {
+        Assert.notNull(name, "Name must not be null");
 
-        @NotNull(message = "Price is mandatory")
-        @DecimalMin(value = "0.01", message = "Price need to be greater than zero")
-        BigDecimal price,
-
-        @NotNull(message = "Calories is mandatory")
-        Float calories,
-
-        @NotNull(message = "Id is mandatory")
-        @Min(value = 1, message = "Id must be greater or equal to one")
-        Long id
-) {
+        this.id = new FoodId();
+        this.name = name;
+        this.price = price;
+        this.calories = calories;
+        this.quantity = quantity;
+    }
 }

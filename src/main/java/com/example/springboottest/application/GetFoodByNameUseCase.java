@@ -1,5 +1,6 @@
 package com.example.springboottest.application;
 
+import com.example.springboottest.dto.FoodOutput;
 import com.example.springboottest.exception.RestaurantNotFoundException;
 import com.example.springboottest.model.FoodEntity;
 import com.example.springboottest.repository.RestaurantRepository;
@@ -16,10 +17,11 @@ public class GetFoodByNameUseCase {
         this.foodsList = restaurantRepository.getFoodsList();
     }
 
-    public FoodEntity execute(String name) {
+    public FoodOutput execute(String name) {
         return foodsList.stream()
-                .filter(food -> Objects.equals(food.name(), name))
+                .filter(food -> Objects.equals(food.getName(), name))
                 .findFirst()
+                .map(FoodOutput::from)
                 .orElseThrow(() ->
                         new RestaurantNotFoundException(name + " not found"));
     }

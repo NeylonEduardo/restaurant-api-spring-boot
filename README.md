@@ -23,13 +23,15 @@ A REST API for restaurant food management, developed to practice Java and Spring
 ## Food structure
 
 ```json
-{
-  "name": "Margherita Pizza",
-  "quantity": 8,
-  "price": 32.50,
-  "calories": 720.0,
-  "id": 1
-}
+[
+  {
+    "name": "Margherita Pizza",
+    "quantity": 8,
+    "price": 32.50,
+    "calories": 720.0,
+    "id": 1
+  }
+]
 ```
 
 ## Base URL

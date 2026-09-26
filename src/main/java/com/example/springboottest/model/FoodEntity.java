@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-public record FoodInfo(
+public record FoodEntity(
         @NotBlank(message = "The name is mandatory")
         String name,
 

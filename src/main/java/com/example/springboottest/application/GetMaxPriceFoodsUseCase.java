@@ -1,7 +1,7 @@
 package com.example.springboottest.application;
 
 import com.example.springboottest.exception.ValidListEmpty;
-import com.example.springboottest.model.FoodInfo;
+import com.example.springboottest.model.FoodEntity;
 import com.example.springboottest.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 public class GetMaxPriceFoodsUseCase {
-    private final List<FoodInfo> foodsList;
+    private final List<FoodEntity> foodsList;
     private final ValidListEmpty validListEmpty;
 
     public GetMaxPriceFoodsUseCase(RestaurantRepository restaurantRepository, ValidListEmpty validListEmpty) {
@@ -18,7 +18,7 @@ public class GetMaxPriceFoodsUseCase {
         this.validListEmpty = validListEmpty;
     }
 
-    public List<FoodInfo> execute(BigDecimal maxPrice) {
+    public List<FoodEntity> execute(BigDecimal maxPrice) {
         validListEmpty.validNotEmptyList(foodsList);
         return foodsList.stream()
                 .filter(food -> food.price().compareTo(maxPrice) <= 0)

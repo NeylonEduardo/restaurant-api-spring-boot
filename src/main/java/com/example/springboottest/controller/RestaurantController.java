@@ -1,7 +1,7 @@
 package com.example.springboottest.controller;
 
 import com.example.springboottest.application.*;
-import com.example.springboottest.model.FoodInfo;
+import com.example.springboottest.model.FoodEntity;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
@@ -43,31 +43,31 @@ public class RestaurantController {
     }
 
     @PostMapping("/foods")
-    public ResponseEntity<String> postFoods(@RequestBody List<@Valid FoodInfo> foodInfoList) {
+    public ResponseEntity<String> postFoods(@RequestBody @Valid FoodEntity entity) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(createFood.execute(foodInfoList));
+                .body(createFood.execute(entity));
     }
 
     @GetMapping("/foods")
-    public ResponseEntity<List<FoodInfo>> getAllFoods() {
+    public ResponseEntity<List<FoodEntity>> getAllFoods() {
         return ResponseEntity.ok(getAllFoods.execute());
     }
 
     @GetMapping("/foods/order")
-    public ResponseEntity<List<FoodInfo>> sortBy(@RequestParam(defaultValue = "id") String sortBy) {
+    public ResponseEntity<List<FoodEntity>> sortBy(@RequestParam(defaultValue = "id") String sortBy) {
         return ResponseEntity.ok(getFoodsOrdered.execute(sortBy));
     }
 
     @GetMapping("/foods/{id}")
-    public ResponseEntity<FoodInfo> getFoodById(@PathVariable Long id) {
+    public ResponseEntity<FoodEntity> getFoodById(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .body(getFoodById.execute(id));
     }
 
     @GetMapping("/foods/search")
-    public ResponseEntity<FoodInfo> searchFood(@RequestParam String name) {
+    public ResponseEntity<FoodEntity> searchFood(@RequestParam String name) {
         return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .body(getFoodByName.execute(name));
@@ -79,7 +79,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/foods/filter")
-    public ResponseEntity<List<FoodInfo>> findByMaxPrice(@RequestParam @Positive BigDecimal maxPrice) {
+    public ResponseEntity<List<FoodEntity>> findByMaxPrice(@RequestParam @Positive BigDecimal maxPrice) {
         return ResponseEntity.ok(getMaxPriceFoods.execute(maxPrice));
     }
 

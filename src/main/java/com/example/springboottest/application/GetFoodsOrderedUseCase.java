@@ -2,7 +2,7 @@ package com.example.springboottest.application;
 
 import com.example.springboottest.dto.FoodOutput;
 import com.example.springboottest.model.FoodEntity;
-import com.example.springboottest.repository.RestaurantRepository;
+import com.example.springboottest.repository.FoodRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -10,10 +10,10 @@ import java.util.List;
 
 @Service
 public class GetFoodsOrderedUseCase {
-    private final List<FoodEntity> foodsList;
+    private final FoodRepository repository;
 
-    public GetFoodsOrderedUseCase(RestaurantRepository restaurantRepository) {
-        this.foodsList = restaurantRepository.getFoodsList();
+    public GetFoodsOrderedUseCase(FoodRepository repository) {
+        this.repository = repository;
     }
 
     public List<FoodOutput> execute(String sortBy) {
@@ -30,6 +30,8 @@ public class GetFoodsOrderedUseCase {
 
             default -> throw new IllegalStateException("Unexpected value: " + sortBy);
         };
+
+        List<FoodEntity> foodsList = repository.findAll();
 
         return foodsList.stream()
                 .sorted(comparator)

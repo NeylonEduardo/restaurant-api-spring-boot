@@ -8,7 +8,7 @@ import java.util.List;
 public class ValidListEmpty {
     public void validNotEmptyList(List<?> list) {
         if (list.isEmpty()) {
-            throw new RestaurantNotFoundException("This list is empty!");
+            throw new FoodNotFoundException("This list is empty!");
         }
     }
 }

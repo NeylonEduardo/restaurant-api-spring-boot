@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(RestaurantNotFoundException.class)
+    @ExceptionHandler(FoodNotFoundException.class)
     public ResponseEntity<CustomMessageError> handleNotFound(
-            RestaurantNotFoundException exception,
+            FoodNotFoundException exception,
             WebRequest request
     ) {
         CustomMessageError error = new CustomMessageError

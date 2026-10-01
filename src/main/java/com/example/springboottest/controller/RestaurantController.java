@@ -70,7 +70,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/foods/search")
-    public ResponseEntity<FoodOutput> searchFood(@RequestParam String name) {
+    public ResponseEntity<List<FoodOutput>> searchFood(@RequestParam String name) {
         return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .body(getFoodByName.execute(name));

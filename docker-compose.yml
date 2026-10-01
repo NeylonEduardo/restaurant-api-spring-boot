@@ -4,16 +4,28 @@ services:
     container_name: restaurant-mysql
 
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: restaurant_db
       MYSQL_USER: restaurant_user
-      MYSQL_PASSWORD: restaurant_password
+      MYSQL_PASSWORD: ${DB_PASSWORD}
 
     ports:
-      - "3306:3306"
+      - "${DB_PORT:-3306}:3306"
 
     volumes:
       - restaurant_mysql_data:/var/lib/mysql
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h localhost -u root -p$${MYSQL_ROOT_PASSWORD}"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+    restart: unless-stopped
 
 volumes:
   restaurant_mysql_data:

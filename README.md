@@ -102,7 +102,7 @@ restarted.
 * Dependency injection
 * Java records
 * Streams and lambdas
-* DTOs to control the response and output
+* DTOs
 * Comparator
 * Request parameters
 * ResponseEntity

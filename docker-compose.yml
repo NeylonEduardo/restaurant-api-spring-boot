@@ -1,0 +1,19 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: restaurant-mysql
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: restaurant_db
+      MYSQL_USER: restaurant_user
+      MYSQL_PASSWORD: restaurant_password
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - restaurant_mysql_data:/var/lib/mysql
+
+volumes:
+  restaurant_mysql_data:

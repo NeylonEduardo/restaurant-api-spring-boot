@@ -3,17 +3,15 @@ package com.example.springboottest.application;
 import com.example.springboottest.dto.FoodOutput;
 import com.example.springboottest.dto.FoodRequest;
 import com.example.springboottest.model.FoodEntity;
-import com.example.springboottest.repository.RestaurantRepository;
+import com.example.springboottest.repository.FoodRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CreateFoodUseCase {
-    private final List<FoodEntity> foodsList;
+    private final FoodRepository repository;
 
-    public CreateFoodUseCase(RestaurantRepository restaurantRepository) {
-        this.foodsList = restaurantRepository.getFoodsList();
+    public CreateFoodUseCase(FoodRepository repository) {
+        this.repository = repository;
     }
 
     public FoodOutput execute(FoodRequest request) {
@@ -23,7 +21,7 @@ public class CreateFoodUseCase {
                 request.calories(),
                 request.quantity());
 
-        foodsList.add(entity);
+        repository.save(entity);
 
         return FoodOutput.from(entity);
     }

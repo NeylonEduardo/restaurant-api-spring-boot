@@ -1,7 +1,9 @@
 package com.example.springboottest.model;
 
 import com.example.springboottest.domain.FoodId;
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.util.Assert;
 
@@ -9,8 +11,13 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
+@Entity
+@NoArgsConstructor
 public class FoodEntity {
+
+    @EmbeddedId
     private FoodId id;
+
     private String name;
     private BigDecimal price;
     private float calories;

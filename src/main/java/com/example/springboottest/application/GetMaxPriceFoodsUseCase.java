@@ -3,7 +3,7 @@ package com.example.springboottest.application;
 import com.example.springboottest.dto.FoodOutput;
 import com.example.springboottest.exception.ValidListEmpty;
 import com.example.springboottest.model.FoodEntity;
-import com.example.springboottest.repository.RestaurantRepository;
+import com.example.springboottest.repository.FoodRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -11,16 +11,19 @@ import java.util.List;
 
 @Service
 public class GetMaxPriceFoodsUseCase {
-    private final List<FoodEntity> foodsList;
+    private final FoodRepository repository;
     private final ValidListEmpty validListEmpty;
 
-    public GetMaxPriceFoodsUseCase(RestaurantRepository restaurantRepository, ValidListEmpty validListEmpty) {
-        this.foodsList = restaurantRepository.getFoodsList();
+    public GetMaxPriceFoodsUseCase(FoodRepository repository, ValidListEmpty validListEmpty) {
+        this.repository = repository;
         this.validListEmpty = validListEmpty;
     }
 
     public List<FoodOutput> execute(BigDecimal maxPrice) {
+        List<FoodEntity> foodsList = repository.findAll();
+
         validListEmpty.validNotEmptyList(foodsList);
+
         return foodsList.stream()
                 .filter(food -> food.getPrice().compareTo(maxPrice) <= 0)
                 .map(FoodOutput::from)

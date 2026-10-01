@@ -1,22 +1,24 @@
 package com.example.springboottest.application;
 
 import com.example.springboottest.model.FoodEntity;
-import com.example.springboottest.repository.RestaurantRepository;
+import com.example.springboottest.repository.FoodRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class GetSummaryUserCase {
-    private final List<FoodEntity> foodsList;
+    private final FoodRepository repository;
 
-    public GetSummaryUserCase(RestaurantRepository restaurantRepository) {
-        this.foodsList = restaurantRepository.getFoodsList();
+    public GetSummaryUserCase(FoodRepository repository) {
+        this.repository = repository;
     }
 
     public List<String> execute() {
-        return foodsList.stream()
+        return repository.findAll()
+                .stream()
                 .map(FoodEntity::getName)
                 .toList();
+
     }
 }

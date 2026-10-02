@@ -13,6 +13,9 @@ A REST API for restaurant food management, developed to practice Java, Spring Bo
 - Docker
 - Docker Compose
 - Gradle
+- JUnit
+- MockMvc
+- H2 Database
 
 ## Features
 
@@ -24,6 +27,7 @@ A REST API for restaurant food management, developed to practice Java, Spring Bo
 - Validate request data
 - Handle custom exceptions
 - Persist data in MySQL
+- Integration tests with JUnit, MockMvc and H2
 
 ## Food structure
 

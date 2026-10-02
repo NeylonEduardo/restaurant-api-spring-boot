@@ -64,16 +64,16 @@ public class RestaurantController {
 
     @GetMapping("/foods/{id}")
     public ResponseEntity<FoodOutput> getFoodById(@PathVariable UUID id) {
-        return ResponseEntity
-                .status(HttpStatus.FOUND)
-                .body(getFoodById.execute(new FoodId(id)));
+        return ResponseEntity.ok(
+                getFoodById.execute(new FoodId(id))
+        );
     }
 
     @GetMapping("/foods/search")
     public ResponseEntity<List<FoodOutput>> searchFood(@RequestParam String name) {
-        return ResponseEntity
-                .status(HttpStatus.FOUND)
-                .body(getFoodByName.execute(name));
+        return ResponseEntity.ok(
+                getFoodByName.execute(name)
+        );
     }
 
     @GetMapping("/foods/summary")

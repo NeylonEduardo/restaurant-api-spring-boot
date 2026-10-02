@@ -1,6 +1,7 @@
 package com.example.springboottest.application;
 
 import com.example.springboottest.dto.FoodOutput;
+import com.example.springboottest.exception.FoodNotFoundException;
 import com.example.springboottest.repository.FoodRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,13 @@ public class GetFoodByNameUseCase {
     }
 
     public List<FoodOutput> execute(String name) {
-        return repository.findByNameIgnoreCase(name)
+        List<FoodOutput> foodName = repository.findByNameIgnoreCase(name)
                 .stream()
                 .map(FoodOutput::from)
                 .toList();
+
+        if (foodName.isEmpty()) throw new FoodNotFoundException(String.format("%s does not exist", name));
+
+        return foodName;
     }
 }

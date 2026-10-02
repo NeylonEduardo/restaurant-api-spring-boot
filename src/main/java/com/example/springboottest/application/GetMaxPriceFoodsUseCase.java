@@ -20,12 +20,11 @@ public class GetMaxPriceFoodsUseCase {
     }
 
     public List<FoodOutput> execute(BigDecimal maxPrice) {
-        List<FoodEntity> foodsList = repository.findAll();
+        List<FoodEntity> foods = repository.findByPriceLessThanEqual(maxPrice);
 
-        validListEmpty.validNotEmptyList(foodsList);
+        validListEmpty.validNotEmptyList(foods);
 
-        return foodsList.stream()
-                .filter(food -> food.getPrice().compareTo(maxPrice) <= 0)
+        return foods.stream()
                 .map(FoodOutput::from)
                 .toList();
     }

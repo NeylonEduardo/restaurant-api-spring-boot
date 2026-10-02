@@ -5,9 +5,9 @@ plugins {
     id("io.freefair.lombok") version "9.7.0"
 }
 
-group = "com.example"
+group = "com.neylon"
 version = "0.0.1-SNAPSHOT"
-description = "SpringBootTest"
+description = "Restaurant food management REST API"
 
 java {
     toolchain {
@@ -25,6 +25,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testRuntimeOnly("com.h2database:h2")
     runtimeOnly("com.mysql:mysql-connector-j")
 }
 

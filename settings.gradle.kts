@@ -1,1 +1,1 @@
-rootProject.name = "SpringBootTest"
+rootProject.name = "restaurant-api-spring-boot"

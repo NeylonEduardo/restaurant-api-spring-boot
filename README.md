@@ -61,7 +61,7 @@ http://localhost:8080/restaurant
 
 ### Requirements
 
-- Java 17 or newer
+- Java 26
 - Docker
 - Docker Compose
 

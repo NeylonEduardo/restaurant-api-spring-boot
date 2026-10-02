@@ -18,6 +18,7 @@ public class GetSummaryUserCase {
         return repository.findAll()
                 .stream()
                 .map(FoodEntity::getName)
+                .sorted()
                 .toList();
 
     }

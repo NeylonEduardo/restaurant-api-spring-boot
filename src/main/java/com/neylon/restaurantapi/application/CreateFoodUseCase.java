@@ -4,8 +4,10 @@ import com.neylon.restaurantapi.dto.FoodOutput;
 import com.neylon.restaurantapi.dto.FoodRequest;
 import com.neylon.restaurantapi.model.FoodEntity;
 import com.neylon.restaurantapi.repository.FoodRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class CreateFoodUseCase {
     private final FoodRepository repository;
@@ -21,8 +23,10 @@ public class CreateFoodUseCase {
                 request.calories(),
                 request.quantity());
 
-        repository.save(entity);
+        FoodEntity saved = repository.save(entity);
 
-        return FoodOutput.from(entity);
+        log.info("Food created successfully. id={}", saved.getId().id());
+
+        return FoodOutput.from(saved);
     }
 }

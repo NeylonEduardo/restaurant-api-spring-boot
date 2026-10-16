@@ -4,6 +4,7 @@ import com.neylon.restaurantapi.application.*;
 import com.neylon.restaurantapi.domain.FoodId;
 import com.neylon.restaurantapi.dto.FoodOutput;
 import com.neylon.restaurantapi.dto.FoodRequest;
+import com.neylon.restaurantapi.enums.CategoryType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ public class RestaurantController {
     private final GetMaxPriceFoodsUseCase getMaxPriceFoods;
     private final GetSummaryUserCase getSummary;
     private final GetFoodsOrderedUseCase getFoodsOrdered;
+    private final GetFoodByCategoryUseCase getFoodByCategoryUseCase;
 
     public RestaurantController(CreateFoodUseCase createFood,
                                 DeleteFoodByIdUseCase deleteFoodById,
@@ -33,7 +35,7 @@ public class RestaurantController {
                                 GetFoodByNameUseCase getFoodByName,
                                 GetMaxPriceFoodsUseCase getMaxPriceFoods,
                                 GetSummaryUserCase getSummary,
-                                GetFoodsOrderedUseCase getFoodsOrdered) {
+                                GetFoodsOrderedUseCase getFoodsOrdered, GetFoodByCategoryUseCase getFoodByCategoryUseCase) {
 
         this.createFood = createFood;
         this.deleteFoodById = deleteFoodById;
@@ -43,10 +45,11 @@ public class RestaurantController {
         this.getMaxPriceFoods = getMaxPriceFoods;
         this.getSummary = getSummary;
         this.getFoodsOrdered = getFoodsOrdered;
+        this.getFoodByCategoryUseCase = getFoodByCategoryUseCase;
     }
 
     @PostMapping("/foods")
-    public ResponseEntity<FoodOutput> postFoods(@RequestBody @Valid FoodRequest request) {
+    public ResponseEntity<FoodOutput> create(@RequestBody @Valid FoodRequest request) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(createFood.execute(request));
@@ -84,6 +87,13 @@ public class RestaurantController {
     @GetMapping("/foods/filter")
     public ResponseEntity<List<FoodOutput>> findByMaxPrice(@RequestParam @Positive BigDecimal maxPrice) {
         return ResponseEntity.ok(getMaxPriceFoods.execute(maxPrice));
+    }
+
+    @GetMapping("/foods/category/{category}")
+    public ResponseEntity<List<FoodOutput>> findAllByCategory(@PathVariable @Valid CategoryType category) {
+        return ResponseEntity.ok(
+                getFoodByCategoryUseCase.execute(category)
+        );
     }
 
     @DeleteMapping("/foods/{id}")

@@ -1,48 +1,81 @@
 # Restaurant API
 
-A REST API for restaurant food management, developed to practice Java, Spring Boot and relational database persistence.
+A REST API for restaurant food management built with Java and Spring Boot. This project was developed to practice
+RESTful design, relational persistence, entity relationships, validation, and integration testing.
 
 ## Technologies
 
-- Java
-- Spring Boot
-- Spring Web
-- Spring Data JPA
+- Java 26
+- Spring Boot and Spring Web
+- Spring Data JPA / Hibernate
 - Jakarta Validation
 - MySQL
-- Docker
-- Docker Compose
+- Docker and Docker Compose
 - Gradle
-- JUnit
-- MockMvc
-- H2 Database
+- JUnit and MockMvc
+- H2 Database (integration tests)
 
 ## Features
 
-- Register and remove foods
-- Find foods by ID or name
+- Register, retrieve, and delete foods
+- Search foods by name or UUID
 - Filter foods by maximum price
-- Order foods by different properties
-- Generate a food summary
-- Validate request data
-- Handle custom exceptions
-- Persist data in MySQL
-- Integration tests with JUnit, MockMvc and H2
+- Order foods by selected properties
+- Generate summaries of registered foods
+- Associate foods with predefined categories
+- Persist food-category relationships using a foreign key
+- Validate incoming requests and handle custom exceptions
+- Run integration tests with JUnit, MockMvc, and H2
 
-## Food structure
+## Food and category relationship
 
-```json
+Foods are stored in a `foods` table and categories in a `categories` table. Each food belongs to one category, while a
+category can be shared by many foods (`@ManyToOne`). The `foods.category_id` foreign key references `categories.id`.
+
+Categories are represented by a `CategoryType` enum:
+
+- `FAST_FOOD`
+- `HEALTHY`
+- `DESSERT`
+- `DRINK`
+
+A Spring Boot `CommandLineRunner` initializes any missing predefined categories in the database. Existing categories are
+reused rather than duplicated.
+
+Clients provide a category **name**, while the API resolves its corresponding `CategoryEntity` and stores the
+relationship using the category ID.
+
+## Example request
+
+```http
+POST http://localhost:8080/restaurant/foods
+Content-Type: application/json
+
 {
   "name": "Margherita Pizza",
   "price": 32.50,
   "calories": 720.0,
-  "quantity": 8
+  "quantity": 10,
+  "categoryName": "FAST_FOOD"
 }
 ```
 
-## Base URL
+Example successful response (`201 Created`):
 
-All endpoints use the following base path:
+```json
+{
+  "id": "e7a53c8b-ebb9-41bd-abe3-042c7e1fba1c",
+  "name": "Margherita Pizza",
+  "price": 32.50,
+  "calories": 720.0,
+  "quantity": 10,
+  "category": "FAST_FOOD"
+}
+```
+
+The UUID above is illustrative; IDs are generated when foods are created.
+
+## Base URL
 
 ```text
 http://localhost:8080/restaurant
@@ -50,24 +83,24 @@ http://localhost:8080/restaurant
 
 ## Endpoints
 
-| Method   | Endpoint                                           | Description                           |
-|----------|----------------------------------------------------|---------------------------------------|
-| `GET`    | `/restaurant/foods`                                | Returns all foods                     |
-| `GET`    | `/restaurant/foods/{id}`                           | Returns a food by ID                  |
-| `POST`   | `/restaurant/foods`                                | Registers a new food                  |
-| `DELETE` | `/restaurant/foods/{id}`                           | Removes a food by ID                  |
-| `GET`    | `/restaurant/foods/search?name=Margherita%20Pizza` | Searches for a food by name           |
-| `GET`    | `/restaurant/foods/filter?maxPrice=30`             | Filters foods by maximum price        |
-| `GET`    | `/restaurant/foods/order?sortBy=price`             | Orders foods by the selected property |
-| `GET`    | `/restaurant/foods/summary`                        | Returns a summary of the stored foods |
+| Method   | Endpoint                                           | Description                        |
+|----------|----------------------------------------------------|------------------------------------|
+| `GET`    | `/restaurant/foods`                                | List all foods                     |
+| `GET`    | `/restaurant/foods/{id}`                           | Get a food by UUID                 |
+| `POST`   | `/restaurant/foods`                                | Register a food with a category    |
+| `DELETE` | `/restaurant/foods/{id}`                           | Remove a food by UUID              |
+| `GET`    | `/restaurant/foods/search?name=Margherita%20Pizza` | Search for foods by name           |
+| `GET`    | `/restaurant/foods/category/{category}`            | Filter by category                 |
+| `GET`    | `/restaurant/foods/filter?maxPrice=30`             | Filter foods by maximum price      |
+| `GET`    | `/restaurant/foods/order?sortBy=price`             | Order foods by a selected property |
+| `GET`    | `/restaurant/foods/summary`                        | Get a summary of stored foods      |
 
 ## Running locally
 
 ### Requirements
 
 - Java 26
-- Docker
-- Docker Compose
+- Docker and Docker Compose
 
 ### 1. Clone the repository
 
@@ -78,104 +111,103 @@ cd restaurant-api-spring-boot
 
 ### 2. Create the environment file
 
-On Linux or macOS:
+Linux or macOS:
 
 ```bash
 cp .env.example .env
 ```
 
-On Windows PowerShell:
+Windows PowerShell:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-Open `.env` and replace the example passwords with local values.
-
-The `.env` file is ignored by Git and must not be committed.
+Update the example credentials in `.env` with your own local values. **Do not commit this file.**
 
 ### 3. Start MySQL
 
 ```bash
 docker compose up -d
-```
-
-Check the container status:
-
-```bash
 docker compose ps
 ```
 
 ### 4. Configure the application environment
 
-When using IntelliJ IDEA, configure the Spring Boot Run Configuration to load the `.env` file:
+In IntelliJ IDEA, use **Run → Edit Configurations → Environment variables** to configure the variables defined in
+`.env`.
 
-```text
-Run → Edit Configurations → Environment variables
-```
-
-Select the `.env` file created in the project root.
+If you run the app through Gradle instead of an IntelliJ run configuration, ensure the same required environment
+variables are available to that process.
 
 ### 5. Run the application
 
-On Windows:
+Windows PowerShell:
 
 ```powershell
 .\gradlew.bat bootRun
 ```
 
-On Linux or macOS:
+Linux or macOS:
 
 ```bash
 ./gradlew bootRun
 ```
 
-The API will be available at:
+The API runs at `http://localhost:8080` by default.
 
-```text
-http://localhost:8080
+## Running tests
+
+Windows PowerShell:
+
+```powershell
+.\gradlew.bat test
 ```
+
+Linux or macOS:
+
+```bash
+./gradlew test
+```
+
+Integration tests cover food creation, retrieval, deletion, invalid requests, and missing resources, including category
+associations. The test profile uses H2 to avoid modifying the development MySQL database.
 
 ## Data storage
 
-The API stores food data in a MySQL database running inside a Docker container.
+Food and category data are persisted in MySQL, running in Docker. A named Docker volume preserves database contents
+across application and container restarts.
 
-The database uses a named Docker volume, so registered data is preserved when the container or application is restarted.
-
-To stop the database:
+Stop containers without deleting the database volume:
 
 ```bash
 docker compose down
 ```
 
-Removing the volume will permanently delete the local database data:
+**Warning:** The following also deletes the Docker Compose volumes and their stored data:
 
 ```bash
 docker compose down -v
 ```
 
-## Concepts practiced
+## Architecture and concepts practiced
 
-- REST APIs
-- Layered architecture
-- Controller and Service layers
-- Dependency injection
-- Spring Data JPA
-- Relational database persistence
-- Repository pattern
-- Java records
-- DTOs
-- Streams and lambdas
-- Comparator
-- Request parameters
-- ResponseEntity
-- Data validation
-- Custom exception handling
-- Docker Compose
-- Environment variables
+- REST APIs and HTTP response codes
+- Controller, use case/application, repository, domain, DTO, and entity separation
+- Dependency injection and repository pattern
+- Spring Data JPA and relational persistence
+- Entity relationships (`@ManyToOne`, `@JoinColumn`) and foreign keys
+- UUID identifiers and enum mapping (`@Enumerated`)
+- Database initialization with `CommandLineRunner`
+- Transactions (`@Transactional`) and lazy loading
+- Java records, Streams, lambdas, and Comparator
+- Request parameters, `ResponseEntity`, and Jakarta Validation
+- Custom exceptions and centralized exception handling
+- Docker Compose and environment variables
+- Integration tests with JUnit, MockMvc, and H2
 
 ## Author
 
 **Neylon Eduardo**
 
-Computer Science student focused on Java, Spring Boot and backend development.
+Computer Science student focused on Java, Spring Boot, and backend development.

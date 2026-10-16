@@ -5,6 +5,7 @@ import com.neylon.restaurantapi.exception.ValidListEmpty;
 import com.neylon.restaurantapi.model.FoodEntity;
 import com.neylon.restaurantapi.repository.FoodRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,6 +20,7 @@ public class GetMaxPriceFoodsUseCase {
         this.validListEmpty = validListEmpty;
     }
 
+    @Transactional(readOnly = true)
     public List<FoodOutput> execute(BigDecimal maxPrice) {
         List<FoodEntity> foods = repository.findByPriceLessThanEqual(maxPrice);
 

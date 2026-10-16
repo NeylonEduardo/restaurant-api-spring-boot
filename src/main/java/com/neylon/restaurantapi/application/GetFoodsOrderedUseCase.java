@@ -4,6 +4,7 @@ import com.neylon.restaurantapi.dto.FoodOutput;
 import com.neylon.restaurantapi.model.FoodEntity;
 import com.neylon.restaurantapi.repository.FoodRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -16,6 +17,7 @@ public class GetFoodsOrderedUseCase {
         this.repository = repository;
     }
 
+    @Transactional(readOnly = true)
     public List<FoodOutput> execute(String sortBy) {
         Comparator<FoodEntity> comparator = switch (sortBy.toLowerCase()) {
             case "name" -> Comparator.comparing(FoodEntity::getName).thenComparing(FoodEntity::getQuantity);

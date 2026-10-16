@@ -4,6 +4,7 @@ import com.neylon.restaurantapi.dto.FoodOutput;
 import com.neylon.restaurantapi.exception.FoodNotFoundException;
 import com.neylon.restaurantapi.repository.FoodRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class GetFoodByNameUseCase {
         this.repository = repository;
     }
 
+    @Transactional(readOnly = true)
     public List<FoodOutput> execute(String name) {
         List<FoodOutput> foodName = repository.findByNameIgnoreCase(name)
                 .stream()

@@ -27,4 +27,21 @@ public class GlobalExceptionHandler {
                 status(HttpStatus.NOT_FOUND)
                 .body(error);
     }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<CustomMessageError> handleNotFound(
+            CategoryNotFoundException exception,
+            WebRequest request
+    ) {
+        CustomMessageError error = new CustomMessageError
+                (
+                        HttpStatus.NOT_FOUND.value(),
+                        LocalDateTime.now(),
+                        exception.getMessage(),
+                        request.getDescription(false)
+                );
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(error);
+    }
 }

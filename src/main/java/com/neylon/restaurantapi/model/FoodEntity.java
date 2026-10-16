@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @Setter
 @Entity
 @NoArgsConstructor
+@Table(name = "food")
 public class FoodEntity {
 
     @EmbeddedId
@@ -23,13 +24,20 @@ public class FoodEntity {
     private float calories;
     private int quantity;
 
-    public FoodEntity(String name, BigDecimal price, float calories, int quantity) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private CategoryEntity category;
+
+    public FoodEntity(String name, BigDecimal price, float calories, int quantity, CategoryEntity category) {
+
         Assert.notNull(name, "Name must not be null");
+        Assert.notNull(category, "Category must not be null");
 
         this.id = new FoodId();
         this.name = name;
         this.price = price;
         this.calories = calories;
         this.quantity = quantity;
+        this.category = category;
     }
 }

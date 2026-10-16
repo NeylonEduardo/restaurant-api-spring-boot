@@ -1,5 +1,6 @@
 package com.neylon.restaurantapi.dto;
 
+import com.neylon.restaurantapi.enums.CategoryType;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
@@ -17,6 +18,9 @@ public record FoodRequest(
         float calories,
 
         @PositiveOrZero(message = "Quantity cannot be negative")
-        int quantity
+        int quantity,
+
+        @NotNull(message = "Category is mandatory")
+        CategoryType categoryName
 ) {
 }

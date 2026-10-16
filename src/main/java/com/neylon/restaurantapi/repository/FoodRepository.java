@@ -1,6 +1,7 @@
 package com.neylon.restaurantapi.repository;
 
 import com.neylon.restaurantapi.domain.FoodId;
+import com.neylon.restaurantapi.enums.CategoryType;
 import com.neylon.restaurantapi.model.FoodEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,4 +12,6 @@ public interface FoodRepository extends JpaRepository<FoodEntity, FoodId> {
     List<FoodEntity> findByNameIgnoreCase(String name);
 
     List<FoodEntity> findByPriceLessThanEqual(BigDecimal maxPrice);
+
+    List<FoodEntity> findByCategoryName(CategoryType categoryName);
 }

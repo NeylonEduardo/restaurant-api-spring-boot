@@ -14,7 +14,7 @@ public class CategoryInitializer {
     public CommandLineRunner initializeCategories(
             CategoryRepository repository
     ) {
-        return args -> {
+        return _ -> {
 
             for (CategoryType type : CategoryType.values()) {
                 if (!repository.existsByName(type)) {

@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.jspecify.annotations.NonNull;
 
 import java.util.UUID;
 
@@ -14,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @Table(name = "categories")
-public class CategoryEntity implements Comparable<CategoryType> {
+public class CategoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -23,9 +22,4 @@ public class CategoryEntity implements Comparable<CategoryType> {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)
     private CategoryType name;
-
-    @Override
-    public int compareTo(@NonNull CategoryType other) {
-        return this.name.compareTo(other);
-    }
 }

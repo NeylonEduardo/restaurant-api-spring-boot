@@ -1,6 +1,6 @@
 package com.neylon.restaurantapi.enums;
 
-public enum CategoryType implements Comparable<CategoryType> {
+public enum CategoryType {
     FAST_FOOD,
     HEALTHY,
     DESSERT,

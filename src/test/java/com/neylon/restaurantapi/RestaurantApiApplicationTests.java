@@ -1,5 +1,6 @@
 package com.neylon.restaurantapi;
 
+import com.neylon.restaurantapi.domain.CategoryId;
 import com.neylon.restaurantapi.enums.CategoryType;
 import com.neylon.restaurantapi.model.CategoryEntity;
 import com.neylon.restaurantapi.model.FoodEntity;
@@ -44,6 +45,7 @@ class RestaurantApiApplicationTests {
         categoryRepository.deleteAll();
 
         CategoryEntity category = new CategoryEntity();
+        category.setId(new CategoryId());
         category.setName(CategoryType.FAST_FOOD);
 
         fastFoodCategory = categoryRepository.save(category);

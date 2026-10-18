@@ -1,5 +1,6 @@
 package com.neylon.restaurantapi.config;
 
+import com.neylon.restaurantapi.domain.CategoryId;
 import com.neylon.restaurantapi.enums.CategoryType;
 import com.neylon.restaurantapi.model.CategoryEntity;
 import com.neylon.restaurantapi.repository.CategoryRepository;
@@ -20,6 +21,7 @@ public class CategoryInitializer {
                 if (!repository.existsByName(type)) {
 
                     CategoryEntity category = new CategoryEntity();
+                    category.setId(new CategoryId());
                     category.setName(type);
 
                     repository.save(category);

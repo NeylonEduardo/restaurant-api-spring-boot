@@ -1,12 +1,11 @@
 package com.neylon.restaurantapi.model;
 
+import com.neylon.restaurantapi.domain.CategoryId;
 import com.neylon.restaurantapi.enums.CategoryType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,9 +14,8 @@ import java.util.UUID;
 @Table(name = "categories")
 public class CategoryEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @EmbeddedId
+    private CategoryId id;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)

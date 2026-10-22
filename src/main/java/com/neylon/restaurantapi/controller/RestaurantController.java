@@ -7,6 +7,8 @@ import com.neylon.restaurantapi.dto.FoodRequest;
 import com.neylon.restaurantapi.enums.CategoryType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,8 +58,8 @@ public class RestaurantController {
     }
 
     @GetMapping("/foods")
-    public ResponseEntity<List<FoodOutput>> getAllFoods() {
-        return ResponseEntity.ok(getAllFoods.execute());
+    public ResponseEntity<Page<FoodOutput>> getAllFoods(Pageable pageable) {
+        return ResponseEntity.ok(getAllFoods.execute(pageable));
     }
 
     @GetMapping("/foods/order")

@@ -3,11 +3,11 @@ package com.neylon.restaurantapi.application;
 import com.neylon.restaurantapi.dto.FoodOutput;
 import com.neylon.restaurantapi.exception.FoodNotFoundException;
 import com.neylon.restaurantapi.repository.FoodRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
+@Slf4j
 @Service
 public class GetFoodByNameUseCase {
     private final FoodRepository repository;
@@ -17,14 +17,15 @@ public class GetFoodByNameUseCase {
     }
 
     @Transactional(readOnly = true)
-    public List<FoodOutput> execute(String name) {
-        List<FoodOutput> foodName = repository.findByNameIgnoreCase(name)
-                .stream()
+    public FoodOutput execute(String name) {
+        FoodOutput saved = repository.findByNameIgnoreCase(name)
                 .map(FoodOutput::from)
-                .toList();
+                .orElseThrow(
+                        () -> new FoodNotFoundException("This food does not exist")
+                );
 
-        if (foodName.isEmpty()) throw new FoodNotFoundException(String.format("%s does not exist", name));
+        log.info("Food with name founded. name={}", name);
 
-        return foodName;
+        return saved;
     }
 }

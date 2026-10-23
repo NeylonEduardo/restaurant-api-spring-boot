@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public interface FoodRepository extends JpaRepository<FoodEntity, FoodId> {
-    List<FoodEntity> findByNameIgnoreCase(String name);
+    Optional<FoodEntity> findByNameIgnoreCase(String name);
 
     List<FoodEntity> findByPriceLessThanEqual(BigDecimal maxPrice);
 

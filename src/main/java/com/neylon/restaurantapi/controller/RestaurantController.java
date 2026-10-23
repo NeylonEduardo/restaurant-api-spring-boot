@@ -75,7 +75,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/foods/search")
-    public ResponseEntity<List<FoodOutput>> searchFood(@RequestParam String name) {
+    public ResponseEntity<FoodOutput> searchFood(@RequestParam String name) {
         return ResponseEntity.ok(
                 getFoodByName.execute(name)
         );

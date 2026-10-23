@@ -6,7 +6,6 @@ import com.neylon.restaurantapi.model.CategoryEntity;
 import com.neylon.restaurantapi.model.FoodEntity;
 import com.neylon.restaurantapi.repository.CategoryRepository;
 import com.neylon.restaurantapi.repository.FoodRepository;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +14,14 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -112,6 +113,59 @@ class RestaurantApiApplicationTests {
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.message")
                         .value("id does not exist"));
+    }
+
+    @Test
+    void shouldReturnListWithOnlyFoodNames() throws Exception {
+        FoodEntity savedFood = repository.save(
+                new FoodEntity(
+                        "Smash Burger",
+                        new BigDecimal("30.25"),
+                        750.0f,
+                        5,
+                        fastFoodCategory
+                )
+        );
+
+        String foodName = savedFood.getName();
+
+        MvcResult mvcResult = mockMvc.perform(get("/restaurant/foods/summary"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String responseBody = mvcResult.getResponse().getContentAsString();
+
+        assertThat(responseBody)
+                .contains(foodName)
+                .doesNotContain("French Fries")
+                .isEqualTo("[\"Smash Burger\"]");
+    }
+
+    @Test
+    void shouldFindFoodByName() throws Exception {
+        FoodEntity savedFood = repository.save(
+                new FoodEntity(
+                        "Mac and Cheese",
+                        new BigDecimal("10.25"),
+                        220.0f,
+                        7,
+                        fastFoodCategory
+                )
+        );
+
+        UUID id = savedFood.getId().id();
+
+        mockMvc.perform(get("/restaurant/foods/search")
+                        .param("name", "Mac and Cheese"))
+
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id.toString()))
+                .andExpect(jsonPath("$.name").value("Mac and Cheese"))
+                .andExpect(jsonPath("$.price").value(10.25))
+                .andExpect(jsonPath("$.calories").value(220.0))
+                .andExpect(jsonPath("$.quantity").value(7))
+                .andExpect(jsonPath("$.category").value("FAST_FOOD"));
     }
 
     @Test
